@@ -70,8 +70,8 @@ location / {
  proxy_pass http://tomcat/;
 }
 '
-```
 git clone https://github.com/videnlabs/OpenID-Connect-Java-Spring-Server.git
 cd Open-ID-Connect-Java-Spring-Server
 mvn package
 cp openid-connect-server-webapp/target/openid-connect-server-webapp.war var/lib/tomcat8/webapps
+```
