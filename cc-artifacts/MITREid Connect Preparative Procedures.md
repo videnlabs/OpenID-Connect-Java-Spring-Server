@@ -36,7 +36,7 @@ NOTE: Refer to https://maven.apache.org/download.cgi for the latest version of M
 1. install nginx with ```sudo apt-get install nginx```
 ## Install MITREid Connect
 
-#Example Setup Script
+# Example Setup Script
 ```
 # Install java and nginx
 apt-get install default-jdk nginx
@@ -71,3 +71,7 @@ location / {
 }
 '
 ```
+git clone https://github.com/videnlabs/OpenID-Connect-Java-Spring-Server.git
+cd Open-ID-Connect-Java-Spring-Server
+mvn package
+cp openid-connect-server-webapp/target/openid-connect-server-webapp.war var/lib/tomcat8/webapps
