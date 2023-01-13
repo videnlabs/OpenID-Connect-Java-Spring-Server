@@ -4,6 +4,7 @@
 ## Install Java Development Kit (JDK)
 1. Install java using ```sudo apt-get install default-jdk```
 2. Validate java installation using ```java --version```
+3. Set JAVA_HOME using ```export JAVA_HOME=jvm/java-11-openjdk-amd64```
 ## Install Apache Maven
 1. Download the archive using 
 ```
@@ -19,21 +20,6 @@ NOTE: Refer to https://maven.apache.org/download.cgi for the latest version of M
 3. Add the ```bin``` directory of the created directory ```apache-ant-1.10.13``` to the ```PATH``` environment variable by adding ```export PATH="<PATH_TO_EXTRACT>/apache-ant-1.10.13/bin:<PATH_TO_EXTRACT>/apache-maven-3.8.7/bin:$PATH``` to ```~/bash.rc``` and executing ```source ~/.bashrc```
 4. Create environmental variable ANT_HOME to <PATH_TO_EXTRACT>/apache-ant-1.10.13/ by adding ```export ANT_HOME=<PATH_TO_EXTRACT>/apache-ant-1.10.13/``` to .bashrc
 5. Confirm installation using ```ant -version```
-
-## Install Apache Tomcat
-
-1. Create a user group for Tomcat
-```
-# groupadd tomcat
-# useradd -s /bin/false -g tomcat -d /home/tomcat tomcat
-```
-2. Download Tomcat using ```git clone https://github.com/apache/tomcat.git```
-3. Build Tomcat using Apache Ant
-```
-# cd apache-tomcat-8.5.84
-# ant
-```
-5. Follow instructions in RUNNING.txt
 
 ## Install nginx reverse proxy and certificates
 Gor testing purposes, self-signed certificates can be used, but it is suggested that Let's Encrypt is used for externally accessivle instances.
@@ -108,8 +94,20 @@ TODO: Copy in ubuntu from my local to /etc/nginx/sites-available
  12. Enable the ufw firewall and configure to allow Nginx Full
  13. Restart nginx using ```sudo systemctl reload nginx```  
       
-## Install MITREid Connect
-1. Follow instructions at https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/wiki/Build-instructions
+## Install MITREid Connect and Start
+1. Copy repo with ```git clone https://www.github.com/videlbabs/OpenID-Connect-Java-SpringServer.git```
+2. Navigate to OpenID-Connect-Java-SpringServer and execute ```mvn package``` to build the server
+3. Start with Jetty
+4. From parent directory
+```
+mvn clean install
+```
+5. From ```openid-connect-server-webapp``` folder
+```
+mvn jetty:run-war
+```
+6. Check the install has worked by navigating to https://localhost/openid-connect-server-webapp/ and login using values username: ```user``` and password: ```password```.
+
 # Example Setup Script
 ```
 # Install java and nginx
