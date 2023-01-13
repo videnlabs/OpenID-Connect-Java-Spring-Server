@@ -97,9 +97,11 @@ TODO: Copy in ubuntu from my local to /etc/nginx/sites-available
       
 ## Install MITREid Connect and Start
 1. Copy repo with ```git clone https://www.github.com/videlbabs/OpenID-Connect-Java-SpringServer.git```
-2. Navigate to OpenID-Connect-Java-SpringServer and execute ```mvn package``` to build the server
-3. Start with Jetty
-4. From parent directory
+2. Modify the file in ```openid-connect-server-webapp/src/main/webapp/WEB-INF/server-config.xml``` and change issuer to be the full URL as configured for NGINX. In this example, we will change 'http://localhost:8080/openid-connect-server-webapp' to 'https://10.0.20.17/openid-connect-server-webapp' 
+Further info at  https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/wiki/Server-configuration
+3. Navigate to OpenID-Connect-Java-SpringServer and execute ```mvn package``` to build the server
+4. Start with Jetty
+5. From parent directory
 ```
 mvn clean install
 ```
