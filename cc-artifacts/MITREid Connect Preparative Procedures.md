@@ -22,6 +22,7 @@ NOTE: Refer to https://maven.apache.org/download.cgi for the latest version of M
 5. Confirm installation using ```ant -version```
 
 ## Install nginx reverse proxy and certificates
+### TODO: Fix NGINX config to forward to localhost:8080/openid-connect-server-webapp
 Gor testing purposes, self-signed certificates can be used, but it is suggested that Let's Encrypt is used for externally accessivle instances.
 
 1. Install nginx with ```sudo apt-get install nginx```
