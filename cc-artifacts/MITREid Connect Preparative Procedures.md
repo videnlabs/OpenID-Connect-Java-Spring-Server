@@ -15,9 +15,10 @@ NOTE: Refer to https://maven.apache.org/download.cgi for the latest version of M
 4. Confirm addition by running ```mvn -v```
 ## Install Apache Ant
 1. Download tarball using ```wget https://dlcdn.apache.org//ant/binaries/apache-ant-1.9.16-bin.tar.gz```
-2. Extract the distribution using ```tar xzvf apache-ant-1.9.16-bin.tar.gz```
-3. Add the ```bin``` directory of the created directory ```apache-ant-1.9.16``` to the ```PATH``` environment variable by adding ```export PATH="<PATH_TO_EXTRACT>/ant-1.9.16/bin:<PATH_TO_EXTRACT>/apache-maven-3.8.7/bin:$PATH``` to ```~/bash.rc``` and executing ```source ~/.bashrc```
-4. Create environmental variable ANT_HOME to <PATH_TO_EXTRACT>/apache-ant-1.9.16/ by adding ```export ANT_HOME=<PATH_TO_EXTRACT>/apache-ant-1.9.16/``` to .bashrc
+2. Extract the distribution using ```tar xzvf apache-ant-1.10.13-bin.tar.gz```
+3. Add the ```bin``` directory of the created directory ```apache-ant-1.10.13``` to the ```PATH``` environment variable by adding ```export PATH="<PATH_TO_EXTRACT>/apache-ant-1.10.13/bin:<PATH_TO_EXTRACT>/apache-maven-3.8.7/bin:$PATH``` to ```~/bash.rc``` and executing ```source ~/.bashrc```
+4. Create environmental variable ANT_HOME to <PATH_TO_EXTRACT>/apache-ant-1.10.13/ by adding ```export ANT_HOME=<PATH_TO_EXTRACT>/apache-ant-1.10.13/``` to .bashrc
+5. Confirm installation using ```ant -version```
 
 ## Install Apache Tomcat
 
@@ -26,9 +27,8 @@ NOTE: Refer to https://maven.apache.org/download.cgi for the latest version of M
 # groupadd tomcat
 # useradd -s /bin/false -g tomcat -d /home/tomcat tomcat
 ```
-2. Download Tomcat using ```wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.84/bin/apache-tomcat-8.5.84.tar.gz```
-3. Extract Tomcat using ```tar xzvf apache-tomcat-8.5.84.tar.gz```
-4. Build Tomcat using Apache Ant
+2. Download Tomcat using ```git clone https://github.com/apache/tomcat.git```
+3. Build Tomcat using Apache Ant
 ```
 # cd apache-tomcat-8.5.84
 # ant
@@ -41,7 +41,7 @@ Gor testing purposes, self-signed certificates can be used, but it is suggested 
 1. Install nginx with ```sudo apt-get install nginx```
 2. Create an intial configuration file the definition for the tomcat server in nginx (note: in this instance, mitre-connect.corp.viden.com is used as an example. Subsitute with your domain)
 
-**/etc/nginx/available-sites/mitre-connect.corp.viden.com.conf**
+**/etc/nginx/sites-available/mitre-connect.corp.viden.com.conf**
 ```
 server {
       server_name mitre-connect.corp.viden.com www.mitre-connect.corp.viden.com;
@@ -109,7 +109,7 @@ TODO: Copy in ubuntu from my local to /etc/nginx/sites-available
  13. Restart nginx using ```sudo systemctl reload nginx```  
       
 ## Install MITREid Connect
-
+1. Follow instructions at https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/wiki/Build-instructions
 # Example Setup Script
 ```
 # Install java and nginx
