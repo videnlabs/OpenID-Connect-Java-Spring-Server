@@ -73,25 +73,33 @@ ssl_dhparam /etc/ssl/certs/dhparam.pem;
 10. Configure default file
 **/etc/nginx/available-sites/default**
 ```
+upstream mitre{
+      server 127.0.0.1:8080 fail_timeout=0;
+}
 server {
-    listen 8080 default_server;
-    listen [::]:8080 default_server;
-    server_name 10.0.40.101;
-    return 302 https://$server_name$request_uri;
+    listen 80;
+    listen [::]:80;
+    server_name 10.0.40.102;
+    return 301 https://$server_name$request_uri;
 }
 
 server {
-
     # SSL configuration
-
-    listen 443 ssl http2 default_server;
-    listen [::]:443 ssl http2 default_server;
+    listen 443 ssl;
+    listen [::]:443 ssl;
     include snippets/self-signed.conf;
     include snippets/ssl-params.conf;
+    location / {
+      proxy_set_header Host $host:$server_port$;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_pass http://mitre;
+      proxy_redirect http:// https://;
+      add_header Pragma "no-cache";
     }
+}
 ```
-TODO: Copy in ubuntu from my local to /etc/nginx/sites-available
- 11:wq
  12. Enable the ufw firewall and configure to allow Nginx Full
  13. Restart nginx using ```sudo systemctl reload nginx```  
       
@@ -100,8 +108,7 @@ TODO: Copy in ubuntu from my local to /etc/nginx/sites-available
 2. Modify the file in ```openid-connect-server-webapp/src/main/webapp/WEB-INF/server-config.xml``` and change issuer to be the full URL as configured for NGINX. In this example, we will change 'http://localhost:8080/openid-connect-server-webapp' to 'https://10.0.20.17/openid-connect-server-webapp' 
 Further info at  https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/wiki/Server-configuration
 3. Navigate to OpenID-Connect-Java-SpringServer and execute ```mvn package``` to build the server
-4. Start with Jetty
-5. From parent directory
+4. Start with Jetty. From parent directory
 ```
 mvn clean install
 ```
@@ -112,41 +119,3 @@ mvn jetty:run-war
 6. Check the install has worked by navigating to https://localhost/openid-connect-server-webapp/ and login using values username: ```user``` and password: ```password```.
 
 # Example Setup Script
-```
-# Install java and nginx
-apt-get install default-jdk nginx
-java --version
-wget https://dlcdn.apache.org/maven/maven-3/3.8.7/binaries/apache-maven-3.8.7-bin.tar.gz
-tar xzvf apache-maven-3.8.7-bin.tar.gz
-echo '$PATH="~/apache-maven-3.8.7/bin:~/apache-ant-1.6.19/bin:$path' >> .bashrc
-echo '$ANT_HOME="~/apache-ant-1.6.19' >> .bashrc
-source ~/bash.rc
-wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.84/bin/apache-tomcat-8.5.84.tar.gz
-cd apache-tomcat-8.5.4
-./setup.sh
-#Generate cert and key
-# Create NGINX rule for Tomcat (forward 8080 to 443)
-'upstream tomcat {
- server 127.0.0.1:8080 weight=100 max_fails=5 fail_timeout=5;
- }
- 
-server {
-    listen              443 ssl;
-    server_name         mitreid-connect.corp.viden.com;
-    ssl_certificate     mitreid-connect.crt;
-    ssl_certificate_key mitreid-connect.key;
-    ssl_protocols       TLSv1.1 TLSv1.2;
-    ssl_ciphers         EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;
-
-location / {
- proxy_set_header X-Forwarded-Host $host;
- proxy_set_header X-Forwarded-Server $host;
- proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
- proxy_pass http://tomcat/;
-}
-'
-git clone https://github.com/videnlabs/OpenID-Connect-Java-Spring-Server.git
-cd Open-ID-Connect-Java-Spring-Server
-mvn package
-cp openid-connect-server-webapp/target/openid-connect-server-webapp.war var/lib/tomcat8/webapps
-```
